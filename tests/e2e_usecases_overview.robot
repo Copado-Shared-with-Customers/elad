@@ -13,8 +13,8 @@ Log in with MFA to a third-party site
     GoTo               https://github.com/
     ClickText          Sign in
 
-    TypeText           Username or email address           test
-    TypeSecret         Password                    test
+    TypeText           Username or email address           ${github_username}
+    TypeSecret         Password                    ${github_password}
     ClickText          Sign in
 
     
