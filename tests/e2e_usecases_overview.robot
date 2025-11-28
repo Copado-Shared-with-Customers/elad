@@ -8,8 +8,29 @@ Suite Teardown         End suite
 
 *** Test Cases ***
 Log in with MFA to a third-party site
-    [Documentation]
-    [Tags]
+    [Documentation]    Automates the GitHub login process with conditional Multi-Factor Authentication (MFA) handling.
+    ...
+    ...                This test case navigates to GitHub, enters user credentials, and intelligently handles
+    ...                two-factor authentication if required. The test uses the GetOTP keyword to generate
+    ...                time-based one-time passwords (TOTP) when 2FA is detected.
+    ...
+    ...                **Prerequisites:**
+    ...                - Variables must be defined: ${github_username}, ${github_password}, ${github_secret}
+    ...                - GitHub account must be accessible
+    ...                - If 2FA is enabled, ${github_secret} must contain the valid TOTP secret key
+    ...
+    ...                **Test Flow:**
+    ...                1. Navigate to GitHub homepage
+    ...                2. Click Sign in button
+    ...                3. Enter username and password
+    ...                4. Submit login form
+    ...                5. Check if two-factor authentication is required
+    ...                6. If 2FA detected, generate and enter OTP code
+    ...                7. Verify successful login by confirming Dashboard appears
+    ...
+    ...                **Expected Result:**
+    ...                User is successfully logged in and the Dashboard page is displayed.
+    [Tags]             MFA                         GitHub
     GoTo               https://github.com/
     ClickText          Sign in
 
@@ -23,3 +44,5 @@ Log in with MFA to a third-party site
         ${mfa_code}=                               GetOTP                      ${github_username}                        ${github_secret}    ${github_password}
         TypeText       Enter the code              ${mfa_code}
     END
+
+    VerifyText         Dashboard
