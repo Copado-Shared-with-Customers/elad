@@ -1,6 +1,6 @@
 *** Settings ***
 Library                         QForce
-Library                         FakerLibrary
+Library                         FakerLibrary    locale=en_UK
 Resource                        ../resources/custom_keywords.robot
 Test Setup                      Setup Browser
 Test Teardown                   End suite
@@ -65,7 +65,7 @@ Submit Experience Cloud case form and verify record creation in Salesforce
     # Using FakerLib for generating a contact name and phone number
     ${first_name}               FakerLibrary.First Name
     ${last_name}                FakerLibrary.Last Name
-    ${phone_number}             FakerLibrary.Phone Number
+    ${phone_number}             FakerLibrary.Phone Number                    formatted_phone_number    
 
     # filling the form with the created data
     TypeText                    Contact Name                ${first_name} ${last_name}
@@ -101,3 +101,4 @@ Submit Experience Cloud case form and verify record creation in Salesforce
     VerifyField                 Web Email                   ${first_name}.${last_name}@notexist.com
 
     ${formatted_phone_number}=                              Format Phone Number                     ${phone_number}
+    Log To Console                        ${formatted_phone_number}
