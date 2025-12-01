@@ -24,7 +24,7 @@ End suite
 
 Login
     [Documentation]             Login to Salesforce instance
-    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                          ${password}=${sf_password}
+    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                    ${password}=${sf_password}
     GoTo                        ${login_url}
     TypeText                    Username                    ${username}
     TypeText                    Password                    ${password}
@@ -80,8 +80,13 @@ Close pop up
     END
 
 Format Phone Number
-    [Arguments]    ${raw_number}
-    # We define the regex directly in Python syntax (single backslashes for \d, \.).
-    # We use $raw_number to pass the variable safely into the Python context [9].
-    ${formatted}=    Evaluate    re.sub(r'(\d{3})\.(\d{3})\.(\d{4})x(\d{5})', r'(\1) \2-\3 x\4', $raw_number)    modules=re
-    RETURN    ${formatted}
+    [Arguments]                 ${flawed_number}
+
+    # Pattern: Must double-escape the backslashes
+    ${pattern}=                 Set Variable                \\\\((\\\\d{3})\\\\)(\\\\d{3})-\\\\d{4}x(\\\\d+)
+
+    # Replacement: Must use double-escaped backreferences and explicitly include spaces
+    ${replacement}=             Set Variable                (\\\\1) \\\\2-\\\\3 x\\\\4
+
+    ${corrected_number}=        Replace String Using Regexp                             ${flawed_number}            ${pattern}        ${replacement}
+    RETURN                      ${corrected_number}
