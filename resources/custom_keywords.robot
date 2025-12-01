@@ -24,7 +24,7 @@ End suite
 
 Login
     [Documentation]             Login to Salesforce instance
-    [Arguments]                 ${login_url}=${sf_login_url}    ${username}=${sf_username}    ${password}=${sf_password}
+    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                 ${password}=${sf_password}
     GoTo                        ${login_url}
     TypeText                    Username                    ${username}
     TypeText                    Password                    ${password}
@@ -49,4 +49,32 @@ Home
     [Documentation]
     [Arguments]
     Login
-    VerifyText    Home
+    VerifyText                  Home
+
+    # pop-up Welcome to the Digital Experiences app!
+    Close pop up                Welcome to the Digital Experiences app!                 Cancel and close
+
+    Close pop up                Dismiss                     Dismiss
+
+Close pop up
+    [Documentation]             Conditionally closes a pop-up dialog if specific text is present on the screen.
+    ...
+    ...                         This keyword checks for the presence of text within a pop-up and clicks the close button if found.
+    ...                         If the pop-up is not present, no action is taken (non-blocking behavior).
+    ...
+    ...                         *Arguments:*
+    ...                         - ``text_in_pop_up``: Text to verify the pop-up is displayed (required)
+    ...                         - ``close_option``: Text of the button/link to close the pop-up (optional, default: "Close")
+    ...
+    ...                         *Examples:*
+    ...                         | Close pop up | Are you sure you want to proceed? |
+    ...                         | Close pop up | Session expired | OK |
+    ...                         | Close pop up | Changes saved successfully | Done |
+    ...
+    ...                         *Returns:* None
+    [Arguments]                 ${text_in_pop_up}           ${close_option}=Close
+    ${pop_up}                   IsText                      ${text_in_pop_up}
+
+    IF                          ${pop_up}
+        ClickText               ${close_option}
+    END
