@@ -2,8 +2,8 @@
 Library                     QForce
 Library                     FakerLibrary
 Resource                    ../resources/custom_keywords.robot
-Suite Setup                 Setup Browser
-Suite Teardown              End suite
+Test Setup                  Setup Browser
+Test Teardown               End suite
 
 *** Variables ***
 ${experience_cloud_site}    https://orgfarm-4cf24f140f-dev-ed.develop.my.site.com/PublicDataIntake/
