@@ -81,24 +81,29 @@ Close pop up
 
 Convert Phone Number
     [Arguments]                 ${raw}
-    # Normalize 'x' to lowercase then split on 'x' so extension (if any) is separated
-    ${raw_lower}=               Convert To Lowercase        ${raw}
-    ${parts}=                   Split String                ${raw_lower}                x
-    ${part_len}=                Get Length                  ${parts}
+    ${formatted_phone}          Set Variable                empty
 
+    # Normalize: lowercase and remove spaces
+    ${raw}=                     Convert To Lowercase        ${raw}
+    ${raw}=                     Replace String              ${raw}                      ${SPACE}                    ${EMPTY}
+
+    # Split phone and extension on 'x'
+    ${parts}=                   Split String                ${raw}                      x
     ${phone_part}=              Set Variable                ${parts[0]}
-    ${ext}=                     Set Variable If             ${part_len} > 1             ${parts[1]}                 ${EMPTY}
+    ${ext}=                     Set Variable If             len(${parts}) > 1           ${parts[1]}                 ${EMPTY}
 
-    # Remove non-digit separators from phone part (dots, dashes, spaces)
-    ${digits}=                  Replace String Using Regexp                             ${phone_part}               [^\d]                 ${EMPTY}
+    # Keep only digits from the phone portion
+    ${digits}=                  Replace String Using Regexp                             ${phone_part}               [^0-9]                ${EMPTY}
 
-    # Format phone using a regex: (\d{3})(\d{3})(\d{4}) -> (123) 456-7890
-    ${formatted_phone}=         Replace String Using Regexp                             ${digits}                   ^(\d{3})(\d{3})(\d{4})$    (${1}) ${2}-${3}
+    # Format only if exactly 10 digits
+    Run Keyword If              len(${digits}) == 10
+    ...                         Set Test Variable           ${formatted_phone}          (${digits[0:3]}) ${digits[3:6]}-${digits[6:10]}
 
-    # If formatting failed (not 10 digits) fall back to raw digits
-    Run Keyword If              '${formatted_phone}' == '${digits}'                     Set Variable                ${formatted_phone}    ${digits}
+    # If not 10 digits → fallback to digits as-is
+    Run Keyword If              len(${digits}) != 10
+    ...                         Set Test Variable           ${formatted_phone}          ${digits}
 
-    # Append extension if present
+    # Reattach extension
     ${result}=                  Set Variable If             '${ext}' != ''              ${formatted_phone} x${ext}                        ${formatted_phone}
 
     RETURN                      ${result}
