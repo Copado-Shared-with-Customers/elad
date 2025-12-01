@@ -46,3 +46,24 @@ Log in with MFA to a third-party site
     END
 
     VerifyText         Dashboard
+
+Filling and submitting a third-party form that triggers record creation in Salesforce
+    [Documentation]
+    [Tags]
+    GoTo               https://orgfarm-4cf24f140f-dev-ed.develop.my.site.com/PublicDataIntake/
+
+    TypeText           Contact Name                Hidde Visser
+    TypeText           Email                       test@test.com
+    TypeText           Phone                       0123456789
+    TypeText           Subject                     Test 01-12-2025
+    TypeText           Description                 Test for creating a case through the website!
+    ClickText          Submit Case
+
+    VerifyText         Thank you for submitting your case!
+
+    OpenWindow
+    SwitchWindow       NEW
+
+    Home
+
+    
