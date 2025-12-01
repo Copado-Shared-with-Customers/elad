@@ -79,32 +79,9 @@ Close pop up
         ClickText               ${close_option}s
     END
 
-Format Phone Number
-    [Arguments]                 ${raw}
-
-    # Remove dots
-    ${clean}=                   Replace String              ${raw}                      .                           ${EMPTY}
-
-    # Initialize variables
-    ${number}=                  Set Variable                ${EMPTY}
-    ${ext}=                     Set Variable                ${EMPTY}
-
-    # Split into phone and extension if 'x' exists
-    ${has_ext}=                 Run Keyword And Return Status                           Should Contain              ${clean}                x
-    Run Keyword If              ${has_ext}                  ${parts}=                   Split String                ${clean}                x
-    Run Keyword If              ${has_ext}                  ${number}=                  Set Variable                ${parts}[0]
-    Run Keyword If              ${has_ext}                  ${ext}=                     Set Variable                ${parts}[1]
-
-    # If no extension, entire string is number
-    Run Keyword If              not ${has_ext}              ${number}=                  Set Variable                ${clean}
-
-    # Format the number (assumes 10 digits)
-    ${area}=                    Set Variable                ${number[0:3]}
-    ${pre}=                     Set Variable                ${number[3:6]}
-    ${line}=                    Set Variable                ${number[6:10]}
-
-    # Build final string
-    ${formatted}=               Set Variable                (${area}) ${pre}-${line}
-    Run Keyword If              '${ext}' != ''              ${formatted}=               Set Variable                ${formatted} x${ext}
-
-    RETURN                      ${formatted}
+Format Phone Number Using Python
+    [Arguments]    ${raw_number}
+    # We define the regex directly in Python syntax (single backslashes for \d, \.).
+    # We use $raw_number to pass the variable safely into the Python context [9].
+    ${formatted}=    Evaluate    re.sub(r'(\d{3})\.(\d{3})\.(\d{4})x(\d{5})', r'(\1) \2-\3 x\4', $raw_number)    modules=re
+    [Return]    ${formatted}
