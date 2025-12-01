@@ -99,3 +99,5 @@ Submit Experience Cloud case form and verify record creation in Salesforce
     VerifyField                 Subject                     Case ${TODAY}
     VerifyField                 Web Phone                   ${phone_number}
     VerifyField                 Web Email                   ${first_name}.${last_name}@notexist.com
+
+    ${formatted_phone_number}=                              Format Phone Number                     ${phone_number}
