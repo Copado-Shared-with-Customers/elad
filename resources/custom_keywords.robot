@@ -79,21 +79,34 @@ Close pop up
         ClickText               ${close_option}
     END
 
-Format Phone With Extension
+Format Phone Number
     [Documentation]
-    [Arguments]                 ${RAW}
+    [Arguments]    ${RAW}
     # Remove dots
     ${clean}=                   Replace String              ${RAW}                      .                           ${EMPTY}
 
-    # Split into number and extension (everything after 'x')
-    ${parts}=                   Split String                ${clean}                    x
-    ${number}=                  Set Variable                ${parts}[0]
-    ${ext}=                     Set Variable                ${parts}[1]
+    # Check if the string contains an extension
+    ${has_ext}=                 Run Keyword And Return Status                           Should Contain              ${clean}       x
 
-    # Format number
+    # Split only when extension exists
+    Run Keyword If              ${has_ext}
+    ...                         ${parts}=                   Split String                ${clean}                    x
+    ...                         ${number}=                  Set Variable                ${parts}[0]
+    ...                         ${ext}=                     Set Variable                ${parts}[1]
+
+    Run Keyword If              not ${has_ext}
+    ...                         ${number}=                  Set Variable                ${clean}
+    ...                         ${ext}=                     Set Variable                ${EMPTY}
+
+    # Format the number (always 10 digits assumed)
     ${area}=                    Set Variable                ${number[0:3]}
     ${pre}=                     Set Variable                ${number[3:6]}
     ${line}=                    Set Variable                ${number[6:10]}
 
-    ${formatted}=               Set Variable                (${area}) ${pre}-${line} x${ext}
-    RETURN                      ${formatted}
+    # Build final format based on presence of extension
+    ${formatted}=               Run Keyword If              ${has_ext}
+    ...                         Set Variable                (${area}) ${pre}-${line} x${ext}
+    ...                         ELSE
+    ...                         Set Variable                (${area}) ${pre}-${line}
+
+    RETURN                    ${formatted}
