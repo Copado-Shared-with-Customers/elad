@@ -71,6 +71,7 @@ Submit Experience Cloud case form and verify record creation in Salesforce
     TypeText                Contact Name                ${first_name} ${last_name}
     TypeText                Email                       ${first_name}.${last_name}@notexist.com
     TypeText                Phone                       ${phone_number}
+    Log To Console          ${phone_number}
 
     # Create a unique subject with today's date and time
     ${TODAY}=               Get Current Date            result_format=%d-%m-%Y %H:%M
@@ -92,3 +93,8 @@ Submit Experience Cloud case form and verify record creation in Salesforce
     ClickText               All Open Cases
 
     ClickText               Case ${TODAY}
+
+    VerifyField             Web Name                    ${first_name} ${last_name}
+    VerifyField             Subject                     Case ${TODAY}
+    VerifyField             Web Phone                   ${phone_number}
+    VerifyField             Web Email                   ${first_name}.${last_name}@notexist.com
