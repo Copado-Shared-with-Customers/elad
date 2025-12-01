@@ -79,7 +79,7 @@ Close pop up
         ClickText               ${close_option}s
     END
 
-Format Phone Number Using Python
+Format Phone Number
     [Arguments]    ${raw_number}
     # We define the regex directly in Python syntax (single backslashes for \d, \.).
     # We use $raw_number to pass the variable safely into the Python context [9].
