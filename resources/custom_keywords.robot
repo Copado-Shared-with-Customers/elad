@@ -24,6 +24,7 @@ End suite
 
 Login
     [Documentation]             Login to Salesforce instance
+    [Arguments]                 ${login_url}=${sf_login_url}    ${username}=${sf_username}    ${password}=${sf_password}
     GoTo                        ${login_url}
     TypeText                    Username                    ${username}
     TypeText                    Password                    ${password}
@@ -43,3 +44,9 @@ Global search and select type
     # ClickElement              //button[contains(@aria-label,'Search')]
     TypeText                    Search...                   ${name}
     Clickelement                //span[contains(@title,'${name}')]/ancestor::div[@class\='instant-results-list']//span[contains(text(),'${type}')]
+
+Home
+    [Documentation]
+    [Arguments]
+    Login
+    VerifyText    Home
