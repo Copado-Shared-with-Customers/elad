@@ -81,19 +81,19 @@ Close pop up
 
 Format Phone With Extension
     [Documentation]
-    [Arguments]    ${RAW}
+    [Arguments]                 ${RAW}
     # Remove dots
-    ${clean}=      Replace String    ${RAW}    .    ${EMPTY}
+    ${clean}=                   Replace String              ${RAW}                      .                           ${EMPTY}
 
     # Split into number and extension (everything after 'x')
-    ${parts}=      Split String    ${clean}    x
-    ${number}=     Set Variable    ${parts}[0]
-    ${ext}=        Set Variable    ${parts}[1]
+    ${parts}=                   Split String                ${clean}                    x
+    ${number}=                  Set Variable                ${parts}[0]
+    ${ext}=                     Set Variable                ${parts}[1]
 
     # Format number
-    ${area}=       Set Variable    ${number[0:3]}
-    ${pre}=        Set Variable    ${number[3:6]}
-    ${line}=       Set Variable    ${number[6:10]}
+    ${area}=                    Set Variable                ${number[0:3]}
+    ${pre}=                     Set Variable                ${number[3:6]}
+    ${line}=                    Set Variable                ${number[6:10]}
 
-    ${formatted}=  Set Variable    (${area}) ${pre}-${line} x${ext}
-    RETURN       ${formatted}
+    ${formatted}=               Set Variable                (${area}) ${pre}-${line} x${ext}
+    RETURN                      ${formatted}
