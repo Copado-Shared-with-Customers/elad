@@ -51,11 +51,12 @@ Filling and submitting a third-party form that triggers record creation in Sales
     [Documentation]
     [Tags]
     GoTo               https://orgfarm-4cf24f140f-dev-ed.develop.my.site.com/PublicDataIntake/
-
+    
+    ${TODAY}=          Get Current Date            result_format=%d-%m-%Y %H:%M
     TypeText           Contact Name                Hidde Visser
     TypeText           Email                       test@test.com
     TypeText           Phone                       0123456789
-    TypeText           Subject                     Test 01-12-2025
+    TypeText           Subject                     Case ${TODAY}
     TypeText           Description                 Test for creating a case through the website!
     ClickText          Submit Case
 
@@ -66,4 +67,4 @@ Filling and submitting a third-party form that triggers record creation in Sales
 
     Home
 
-    
+    SXHPTABHEY4UBVOBH6AEXBC4B6CDFWVW
