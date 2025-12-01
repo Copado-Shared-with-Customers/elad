@@ -84,4 +84,4 @@ Format Phone Number Using Python
     # We define the regex directly in Python syntax (single backslashes for \d, \.).
     # We use $raw_number to pass the variable safely into the Python context [9].
     ${formatted}=    Evaluate    re.sub(r'(\d{3})\.(\d{3})\.(\d{4})x(\d{5})', r'(\1) \2-\3 x\4', $raw_number)    modules=re
-    [Return]    ${formatted}
+    RETURN    ${formatted}
