@@ -5,6 +5,7 @@ Suite Setup            Setup Browser
 Suite Teardown         End suite
 
 *** Variables ***
+${experience_cloud_site}    https://orgfarm-4cf24f140f-dev-ed.develop.my.site.com/PublicDataIntake/
 
 *** Test Cases ***
 Log in with MFA to a third-party site
@@ -50,8 +51,8 @@ Log in with MFA to a third-party site
 Filling and submitting a third-party form that triggers record creation in Salesforce
     [Documentation]
     [Tags]
-    GoTo               https://orgfarm-4cf24f140f-dev-ed.develop.my.site.com/PublicDataIntake/
-    
+    GoTo               ${experience_cloud_site}
+    GoTo               ${sf_login_url}/PublicDataIntake/
     ${TODAY}=          Get Current Date            result_format=%d-%m-%Y %H:%M
     TypeText           Contact Name                Hidde Visser
     TypeText           Email                       test@test.com
@@ -67,4 +68,9 @@ Filling and submitting a third-party form that triggers record creation in Sales
 
     Home
 
-    SXHPTABHEY4UBVOBH6AEXBC4B6CDFWVW
+    ClickText          Cases
+    
+    ClickText    Select a List View: Cases
+    ClickText    All Open Cases
+    
+    ClickText    Case ${TODAY}
