@@ -24,7 +24,7 @@ End suite
 
 Login
     [Documentation]             Login to Salesforce instance
-    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                 ${password}=${sf_password}
+    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                          ${password}=${sf_password}
     GoTo                        ${login_url}
     TypeText                    Username                    ${username}
     TypeText                    Password                    ${password}
@@ -76,37 +76,35 @@ Close pop up
     ${pop_up}                   IsText                      ${text_in_pop_up}
 
     IF                          ${pop_up}
-        ClickText               ${close_option}
+        ClickText               ${close_option}s
     END
 
 Format Phone Number
-    [Documentation]
-    [Arguments]    ${RAW}
+    [Arguments]                 ${raw}
+
     # Remove dots
-    ${clean}=                   Replace String              ${RAW}                      .                           ${EMPTY}
+    ${clean}=                   Replace String              ${raw}                      .                           ${EMPTY}
 
-    # Check if the string contains an extension
-    ${has_ext}=                 Run Keyword And Return Status                           Should Contain              ${clean}       x
+    # Initialize variables
+    ${number}=                  Set Variable                ${EMPTY}
+    ${ext}=                     Set Variable                ${EMPTY}
 
-    # Split only when extension exists
-    Run Keyword If              ${has_ext}
-    ...                         ${parts}=                   Split String                ${clean}                    x
-    ...                         ${number}=                  Set Variable                ${parts}[0]
-    ...                         ${ext}=                     Set Variable                ${parts}[1]
+    # Split into phone and extension if 'x' exists
+    ${has_ext}=                 Run Keyword And Return Status                           Should Contain              ${clean}                x
+    Run Keyword If              ${has_ext}                  ${parts}=                   Split String                ${clean}                x
+    Run Keyword If              ${has_ext}                  ${number}=                  Set Variable                ${parts}[0]
+    Run Keyword If              ${has_ext}                  ${ext}=                     Set Variable                ${parts}[1]
 
-    Run Keyword If              not ${has_ext}
-    ...                         ${number}=                  Set Variable                ${clean}
-    ...                         ${ext}=                     Set Variable                ${EMPTY}
+    # If no extension, entire string is number
+    Run Keyword If              not ${has_ext}              ${number}=                  Set Variable                ${clean}
 
-    # Format the number (always 10 digits assumed)
+    # Format the number (assumes 10 digits)
     ${area}=                    Set Variable                ${number[0:3]}
     ${pre}=                     Set Variable                ${number[3:6]}
     ${line}=                    Set Variable                ${number[6:10]}
 
-    # Build final format based on presence of extension
-    ${formatted}=               Run Keyword If              ${has_ext}
-    ...                         Set Variable                (${area}) ${pre}-${line} x${ext}
-    ...                         ELSE
-    ...                         Set Variable                (${area}) ${pre}-${line}
+    # Build final string
+    ${formatted}=               Set Variable                (${area}) ${pre}-${line}
+    Run Keyword If              '${ext}' != ''              ${formatted}=               Set Variable                ${formatted} x${ext}
 
-    RETURN                    ${formatted}
+    RETURN                      ${formatted}
