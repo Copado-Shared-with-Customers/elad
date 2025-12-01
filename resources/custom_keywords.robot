@@ -24,7 +24,7 @@ End suite
 
 Login
     [Documentation]             Login to Salesforce instance
-    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                  ${password}=${sf_password}
+    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                        ${password}=${sf_password}
     GoTo                        ${login_url}
     TypeText                    Username                    ${username}
     TypeText                    Password                    ${password}
@@ -81,22 +81,24 @@ Close pop up
 
 Convert Phone Number
     [Arguments]                 ${raw}
-    # Split phone and extension
-    ${parts}=                   Split String                ${raw}                      x
-    ${phone}=                   Set Variable                ${parts[0]}
-    ${ext}=                     Set Variable If             ${len(parts)} > 1           ${parts[1]}                 ${EMPTY}
+    # Normalize 'x' to lowercase then split on 'x' so extension (if any) is separated
+    ${raw_lower}=               Convert To Lowercase        ${raw}
+    ${parts}=                   Split String                ${raw_lower}                x
+    ${part_len}=                Get Length                  ${parts}
 
-    # Remove dots
-    ${digits}=                  Replace String              ${phone}                    .                           ${EMPTY}
+    ${phone_part}=              Set Variable                ${parts[0]}
+    ${ext}=                     Set Variable If             ${part_len} > 1             ${parts[1]}                 ${EMPTY}
 
-    # Format as (623) 760-8931
-    ${area}=                    Get Substring               ${digits}                   0                           3
-    ${mid}=                     Get Substring               ${digits}                   3                           6
-    ${last}=                    Get Substring               ${digits}                   6
+    # Remove non-digit separators from phone part (dots, dashes, spaces)
+    ${digits}=                  Replace String Using Regexp                             ${phone_part}               [^\d]                 ${EMPTY}
 
-    ${formatted}=               Set Variable                (${area}) ${mid}-${last}
+    # Format phone using a regex: (\d{3})(\d{3})(\d{4}) -> (123) 456-7890
+    ${formatted_phone}=         Replace String Using Regexp                             ${digits}                   ^(\d{3})(\d{3})(\d{4})$    (${1}) ${2}-${3}
 
-    # Add extension back if present
-    ${result}=                  Set Variable If             '${ext}'!=''                ${formatted} x${ext}        ${formatted}
+    # If formatting failed (not 10 digits) fall back to raw digits
+    Run Keyword If              '${formatted_phone}' == '${digits}'                     Set Variable                ${formatted_phone}    ${digits}
 
-    RETURN                    ${result}
+    # Append extension if present
+    ${result}=                  Set Variable If             '${ext}' != ''              ${formatted_phone} x${ext}                        ${formatted_phone}
+
+    RETURN                      ${result}
