@@ -24,7 +24,7 @@ End suite
 
 Login
     [Documentation]             Login to Salesforce instance
-    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                        ${password}=${sf_password}
+    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                 ${password}=${sf_password}
     GoTo                        ${login_url}
     TypeText                    Username                    ${username}
     TypeText                    Password                    ${password}
@@ -79,31 +79,21 @@ Close pop up
         ClickText               ${close_option}
     END
 
-Convert Phone Number
-    [Arguments]                 ${raw}
-    ${formatted_phone}          Set Variable                empty
+Format Phone With Extension
+    [Documentation]
+    [Arguments]    ${RAW}
+    # Remove dots
+    ${clean}=      Replace String    ${RAW}    .    ${EMPTY}
 
-    # Normalize: lowercase and remove spaces
-    ${raw}=                     Convert To Lowercase        ${raw}
-    ${raw}=                     Replace String              ${raw}                      ${SPACE}                    ${EMPTY}
+    # Split into number and extension (everything after 'x')
+    ${parts}=      Split String    ${clean}    x
+    ${number}=     Set Variable    ${parts}[0]
+    ${ext}=        Set Variable    ${parts}[1]
 
-    # Split phone and extension on 'x'
-    ${parts}=                   Split String                ${raw}                      x
-    ${phone_part}=              Set Variable                ${parts[0]}
-    ${ext}=                     Set Variable If             len(${parts}) > 1           ${parts[1]}                 ${EMPTY}
+    # Format number
+    ${area}=       Set Variable    ${number[0:3]}
+    ${pre}=        Set Variable    ${number[3:6]}
+    ${line}=       Set Variable    ${number[6:10]}
 
-    # Keep only digits from the phone portion
-    ${digits}=                  Replace String Using Regexp                             ${phone_part}               [^0-9]                ${EMPTY}
-
-    # Format only if exactly 10 digits
-    Run Keyword If              len(${digits}) == 10
-    ...                         Set Test Variable           ${formatted_phone}          (${digits[0:3]}) ${digits[3:6]}-${digits[6:10]}
-
-    # If not 10 digits → fallback to digits as-is
-    Run Keyword If              len(${digits}) != 10
-    ...                         Set Test Variable           ${formatted_phone}          ${digits}
-
-    # Reattach extension
-    ${result}=                  Set Variable If             '${ext}' != ''              ${formatted_phone} x${ext}                        ${formatted_phone}
-
-    RETURN                      ${result}
+    ${formatted}=  Set Variable    (${area}) ${pre}-${line} x${ext}
+    RETURN       ${formatted}
