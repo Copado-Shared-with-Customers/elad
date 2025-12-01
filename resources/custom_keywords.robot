@@ -24,7 +24,7 @@ End suite
 
 Login
     [Documentation]             Login to Salesforce instance
-    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                 ${password}=${sf_password}
+    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                  ${password}=${sf_password}
     GoTo                        ${login_url}
     TypeText                    Username                    ${username}
     TypeText                    Password                    ${password}
@@ -78,3 +78,25 @@ Close pop up
     IF                          ${pop_up}
         ClickText               ${close_option}
     END
+
+Convert Phone Number
+    [Arguments]                 ${raw}
+    # Split phone and extension
+    ${parts}=                   Split String                ${raw}                      x
+    ${phone}=                   Set Variable                ${parts[0]}
+    ${ext}=                     Set Variable If             ${len(parts)} > 1           ${parts[1]}                 ${EMPTY}
+
+    # Remove dots
+    ${digits}=                  Replace String              ${phone}                    .                           ${EMPTY}
+
+    # Format as (623) 760-8931
+    ${area}=                    Get Substring               ${digits}                   0                           3
+    ${mid}=                     Get Substring               ${digits}                   3                           6
+    ${last}=                    Get Substring               ${digits}                   6
+
+    ${formatted}=               Set Variable                (${area}) ${mid}-${last}
+
+    # Add extension back if present
+    ${result}=                  Set Variable If             '${ext}'!=''                ${formatted} x${ext}        ${formatted}
+
+    RETURN                    ${result}
