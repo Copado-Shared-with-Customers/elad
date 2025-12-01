@@ -69,7 +69,8 @@ Submit Experience Cloud case form and verify record creation in Salesforce
 
     # filling the form with the created data
     TypeText                    Contact Name                ${first_name} ${last_name}
-    TypeText                    Email                       ${first_name}.${last_name}@notexist.com
+    # TypeText                    Email                       ${first_name}.${last_name}@notexist.com
+    TypeText                    Email                       hidde.copado@gmail.com
     TypeText                    Phone                       ${phone_number}
     Log To Console              ${phone_number}
 
