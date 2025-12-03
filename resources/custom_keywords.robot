@@ -23,9 +23,13 @@ Setup Browser
     IF                          "${EXECDIR}" == "/home/executor/execution"
         ${SUITE}=               Evaluate                    "${SUITE NAME}".split(".")[0].lower()
         ${BASE_IMAGE_PATH}      Set Variable                /home/executor/execution/${SUITE}/files
-        List Files In Directory     ${BASE_IMAGE_PATH}      Set Variable                /home/executor/execution/${SUITE}/files
+        List Files In Directory     ${BASE_IMAGE_PATH}
     ELSE
         ${BASE_IMAGE_PATH}      Set Variable                /home/services/suite/files
+        List Files In Directory     ${BASE_IMAGE_PATH}
+        List Files In Directory     ${EXECDIR}
+        List Directories In Directory                       ${EXECDIR}
+        Log To Console                        ${EXECDIR}
     END
 End suite
     Close All Browsers
