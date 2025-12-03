@@ -7,7 +7,7 @@ Test Teardown               End suite
 
 *** Variables ***
 ${experience_cloud_site}    https://orgfarm-4cf24f140f-dev-ed.develop.my.site.com/PublicDataIntake/
-${BASE_IMAGE_PATH}          ${EXECDIR}//..//files//
+${BASE_IMAGE_PATH}          ${/}..${/}files${/}images
 *** Test Cases ***
 Log in with MFA to a third-party site
     [Documentation]         Automates the GitHub login process with conditional Multi-Factor Authentication (MFA) handling.
@@ -116,4 +116,7 @@ Upload files from a local machine to Salesforce or a third-party site
     VerifyText              Was created.
 
     ClickText               Related
-    UploadFile              Upload Files                ${BASE_IMAGE_PATH}crt_overview.jpg
+    UploadFile              Upload Files                ${BASE_IMAGE_PATH}crt_overview.jpg    timeout=3s
+
+directory
+    Log To Console    ${EXECDIR}
