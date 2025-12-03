@@ -3,6 +3,7 @@ Library                         QForce
 Library                         CopadoAI
 Library                         String
 Library                         DateTime
+Library                         OperatingSystem
 
 
 *** Variables ***
@@ -18,7 +19,14 @@ Setup Browser
     SetConfig                   DefaultTimeout              30s                         #sometimes salesforce is slow
     Evaluate                    random.seed()               random                      # initialize random generator
     SetConfig                   Delay                       0.3                         # adds a delay of 0.3 between keywords. This is helpful in cloud with limited resources.
-
+    
+    IF                          "${EXECDIR}" == "/home/executor/execution"
+        ${SUITE}=               Evaluate                    "${SUITE NAME}".split(".")[0].lower()
+        ${BASE_IMAGE_PATH}      Set Variable                /home/executor/execution/${SUITE}/files
+        List Files In Directory     ${BASE_IMAGE_PATH}      Set Variable                /home/executor/execution/${SUITE}/files
+    ELSE
+        ${BASE_IMAGE_PATH}      Set Variable                /home/services/suite/files
+    END
 End suite
     Close All Browsers
 
