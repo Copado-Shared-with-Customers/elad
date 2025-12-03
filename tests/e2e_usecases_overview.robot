@@ -122,4 +122,4 @@ directory
     Log To Console              ${EXECDIR}
     Log                         ${EXECDIR}
     ${SUITE}=                   Evaluate                    "${SUITE NAME}".split(".")[0].lower()
-    List Directories In Directory                           ${EXECDIR}/${SUITE}
+    List Directories In Directory                           ${EXECDIR}/${SUITE}/files
