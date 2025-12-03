@@ -27,10 +27,6 @@ Setup Browser
     ELSE
         ${BASE_IMAGE_PATH}      Set Variable                ${EXECDIR}/../files/
         List Files In Directory                             ${BASE_IMAGE_PATH}
-        List Files In Directory                             ${BASE_IMAGE_PATH}
-        List Directories In Directory                     ${EXECDIR}/../
-        List Files In Directory                     ${EXECDIR}/../files/
-        Log To Console          ${EXECDIR}
     END
 End suite
     Close All Browsers
