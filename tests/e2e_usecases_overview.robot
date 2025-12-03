@@ -121,3 +121,4 @@ Upload files from a local machine to Salesforce or a third-party site
 directory
     Log To Console    ${EXECDIR}
     Log               ${EXECDIR}
+    List Directories In Directory    ${EXECDIR}
