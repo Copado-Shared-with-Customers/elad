@@ -107,7 +107,7 @@ Verify Experience Cloud Case Submission With Multi-User Ownership Transfer
     ...                         - Uses FakerLibrary (locale=en_GB) for realistic test data generation
     ...                         - Implements multi-window handling for Experience Cloud and Salesforce contexts
     ...                         - Timestamp-based subject ensures unique case identification across test runs
-    [Tags]                      E2E                         Experience Cloud            Case Management       Salesforce            Integration    Ownership Transfer    Public Form
+    [Tags]                      E2E                         Experience Cloud            Case Management       Salesforce            Integration        Ownership Transfer    Public Form
 
     # Navigate to Experience Cloud public site and submit case form
     GoTo                        ${experience_cloud_site}
@@ -254,7 +254,80 @@ Verify File Upload To Case Record Via Related Files
     ClickText                   Done                        delay=5s
 
 Clicking floating elements
-    [Documentation]
-    [Tags]
-    GoTo    https://www.copado.com
-    HoverText    Company
+    [Documentation]             Test case for interacting with floating/hover menu elements on the Copado website.
+    ...                         This test demonstrates how to navigate through nested dropdown menus that appear on hover
+    ...                         and verify successful navigation to the Copado Robotic Testing product page.
+    ...
+    ...                         Test Steps:
+    ...                         1. Navigate to the Copado homepage
+    ...                         2. Hover over the "Solutions" menu to reveal dropdown options
+    ...                         3. Hover over the "By Product" submenu item to reveal product options
+    ...                         4. Click on "Copado Robotic Testing" from the product menu
+    ...                         5. Verify successful navigation by checking for expected page content
+    ...
+    ...                         Expected Result:
+    ...                         - The Copado Robotic Testing product page loads successfully
+    ...                         - The page displays the heading "Stop Testing Slow. Start Releasing Fast."
+    [Tags]                      smoke                       navigation                  hover_menu            product_page
+
+    # Navigate to the Copado homepage
+    GoTo                        https://www.copado.com
+
+    # Hover over the main "Solutions" menu item to trigger the dropdown menu
+    # delay=3s ensures the menu has time to fully render before proceeding
+    HoverText                   Solutions                   delay=3s
+
+    # Hover over the "By Product" submenu item within the Solutions dropdown
+    # This reveals the nested product menu options
+    # delay=3s allows the submenu animation to complete
+    HoverText                   By Product                  delay=3s
+
+    # Click on "Copado Robotic Testing" from the product submenu
+    # delay=3s ensures the element is fully interactive before clicking
+    ClickText                   Copado Robotic Testing      delay=3s
+
+    # Verify successful navigation by checking for the expected hero text on the CRT product page
+    VerifyText                  Stop Testing Slow. Start Releasing Fast.
+
+Validating Hebrew text
+    [Documentation]             Test case for validating right-to-left (RTL) Hebrew text rendering on a web page.
+    ...                         This test verifies that the Mechon Mamre website correctly displays Hebrew biblical texts
+    ...                         from the Torah, Prophets, and Writings (Tanakh) with proper character encoding and text direction.
+    ...
+    ...                         Test Steps:
+    ...                         1. Navigate to the Mechon Mamre Hebrew Bible homepage
+    ...                         2. Verify the main title "Torah, Prophets, and Writings" appears in Hebrew
+    ...                         3. Verify subtitle text about Masoretic vocalization appears correctly
+    ...                         4. Verify text about the Aleppo Codex and manuscripts appears correctly
+    ...                         5. Verify the book name "Deuteronomy" appears in Hebrew
+    ...
+    ...                         Expected Result:
+    ...                         - All Hebrew text renders correctly with proper RTL directionality
+    ...                         - Unicode Hebrew characters display without corruption
+    ...                         - Text verification succeeds for all expected Hebrew strings
+    ...
+    ...                         Notes:
+    ...                         - This test validates Unicode support and RTL language handling
+    ...                         - Hebrew text: תורה נביאים וכתובים = "Torah, Prophets, and Writings"
+    ...                         - Tests proper rendering of vowel points (nikud) in Hebrew text
+    [Tags]                      i18n                        rtl                         hebrew                unicode               text_validation
+
+    # Navigate to the Mechon Mamre Hebrew Bible homepage
+    # This site provides the Hebrew Bible with Masoretic vocalization
+    GoTo                        https://mechon-mamre.org/i/t/t0.htm
+
+    # Verify the main page title in Hebrew: "Torah, Prophets, and Writings"
+    # This is the traditional division of the Hebrew Bible (Tanakh)
+    VerifyText                  תורה נביאים וכתובים
+
+    # Verify the subtitle describing the text format
+    # Translation: "In the Masoretic text, vocalized"
+    VerifyText                  בכתיב המסורה מנוקד
+
+    # Verify the description of the source manuscripts
+    # Translation: "According to the Keter (Aleppo Codex) and manuscripts close to it"
+    VerifyText                  לפי הכתר וכתבי היד הקרובים לו
+
+    # Verify the book name "Deuteronomy" appears in Hebrew
+    # דברים (Devarim) is the fifth book of the Torah
+    VerifyText                  דברים
