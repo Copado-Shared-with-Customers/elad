@@ -252,3 +252,9 @@ Verify File Upload To Case Record Via Related Files
     # delay=5s allows time for the file to be fully processed and attached to the record
     # This prevents timing issues where the file might not be immediately visible
     ClickText                   Done                        delay=5s
+
+Clicking floating elements
+    [Documentation]
+    [Tags]
+    GoTo    https://www.copado.com
+    HoverText    Company
