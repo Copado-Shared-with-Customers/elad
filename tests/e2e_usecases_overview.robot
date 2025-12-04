@@ -33,21 +33,40 @@ GitHub Login Flow Including MFA Verification
     ...                         **Expected Result:**
     ...                         User is successfully logged in and the Dashboard page is displayed.
     [Tags]                      MFA                         GitHub
+
+    # Navigate to GitHub homepage to initiate login flow
     GoTo                        https://github.com/
+
+    # Click the Sign in button to access the login form
     ClickText                   Sign in
 
+    # Enter GitHub username or email address in the credentials form
     TypeText                    Username or email address                               ${github_username}
+
+    # Securely enter password (masked input, not logged in execution logs)
     TypeSecret                  Password                    ${github_password}
+
+    # Submit the login form to authenticate with GitHub
     ClickText                   Sign in
 
+    # Check if GitHub requires two-factor authentication for this account
+    # Returns True if "Two-factor authentication" text is present on the page
     ${2fa}                      IsText                      Two-factor authentication
 
+    # Conditional MFA handling: only execute if 2FA challenge is detected
     IF                          ${2fa}
+    # Generate time-based one-time password (TOTP) using the account's secret key
+    # GetOTP uses the TOTP algorithm (RFC 6238) to create a 6-digit code valid for 30 seconds
         ${mfa_code}=            GetOTP                      ${github_username}          ${github_secret}      ${github_password}
+
+        # Enter the generated MFA code into the two-factor authentication input field
         TypeText                Enter the code              ${mfa_code}
     END
 
+    # Verify successful login by confirming the Dashboard page is displayed
+    # This serves as the final assertion that authentication completed successfully
     VerifyText                  Dashboard
+
 
 Verify Experience Cloud Case Submission With Multi-User Ownership Transfer
     [Documentation]             **Purpose:** Validates end-to-end case creation workflow from Experience Cloud public form submission
@@ -183,18 +202,53 @@ Verify File Upload To Case Record Via Related Files
     ...                         - Case Origin: Email
     ...                         - Upload File: crt_overview.jpg
     [Tags]                      Case Management             File Upload                 Smoke Test            Related Files
+
+    # Navigate to Salesforce Home page to establish starting point
     Home
 
+    # Click Home tab to ensure we're on the main navigation
     ClickText                   Home
+
+    # Navigate to Cases object from the App Launcher or navigation menu
     ClickText                   Cases
+
+    # Click New button to open the Case creation form
     ClickText                   New
+
+    # Enable modal context to interact with the New Case dialog
+    # This ensures subsequent actions target elements within the modal window
     UseModal                    On
+
+    # Select "Email" from the Case Origin picklist (required field indicated by *)
+    # This sets how the customer contacted support
     PickList                    *Case Origin                Email
+
+    # Click Save button to create the Case record
+    # partial_match=False ensures we click the exact "Save" button, not "Save & New"
     ClickText                   Save                        partial_match=False
+
+    # Disable modal context after the dialog closes
+    # Returns focus to the main page content
     UseModal                    Off
+
+    # Verify Case was created successfully by checking for confirmation message
+    # This assertion confirms the Case record exists before proceeding to file upload
     VerifyText                  Case created
 
+    # Navigate to the Related tab to access the Files related list
+    # This tab contains all related records including Files, Activities, etc.
     ClickText                   Related
+
+    # Upload the test image file to the Case record
+    # UploadFile locates the "Upload Files" button and attaches crt_overview.jpg
+    # File must exist in the project's files directory or specified path
     UploadFile                  Upload Files                crt_overview.jpg
+
+    # Verify the upload completed successfully by checking the confirmation message
+    # "1 of 1 file uploaded" indicates all selected files were processed without errors
     VerifyText                  1 of 1 file uploaded
+
+    # Close the file upload dialog by clicking Done
+    # delay=5s allows time for the file to be fully processed and attached to the record
+    # This prevents timing issues where the file might not be immediately visible
     ClickText                   Done                        delay=5s
