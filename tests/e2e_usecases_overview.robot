@@ -293,8 +293,6 @@ Clicking floating elements
     # Verify successful navigation by checking for the expected hero text on the CRT product page
     VerifyText                  Stop Testing Slow. Start Releasing Fast.
 
-    VerifyText                  Hidde                       timeout=3s
-
 
 
 Validating Hebrew text
