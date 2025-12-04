@@ -293,7 +293,9 @@ Clicking floating elements
     # Verify successful navigation by checking for the expected hero text on the CRT product page
     VerifyText                  Stop Testing Slow. Start Releasing Fast.
 
-    VerifyText                  Hidde  timeout=3s
+    VerifyText                  Hidde                       timeout=3s
+
+
 
 Validating Hebrew text
     [Documentation]             Test case for validating right-to-left (RTL) Hebrew text rendering on a web page.
@@ -338,77 +340,79 @@ Validating Hebrew text
     # דברים (Devarim) is the fifth book of the Torah
     VerifyText                  דברים
 
+    VerifyText                  מלאכי
+
 Account creation in Salesforce
-    [Documentation]    **Test Objective:**
-    ...    This test case validates the end-to-end process of creating a new Account record 
-    ...    in Salesforce using the standard Lightning UI. It verifies that all required and 
-    ...    optional fields can be populated correctly and that the account is successfully 
-    ...    saved to the database.
+    [Documentation]             **Test Objective:**
+    ...                         This test case validates the end-to-end process of creating a new Account record
+    ...                         in Salesforce using the standard Lightning UI. It verifies that all required and
+    ...                         optional fields can be populated correctly and that the account is successfully
+    ...                         saved to the database.
     ...
-    ...    **Preconditions:**
-    ...    - User must be logged into Salesforce with permissions to create Account records
-    ...    - User must have access to the Accounts tab
-    ...    - Lightning Experience UI must be enabled
+    ...                         **Preconditions:**
+    ...                         - User must be logged into Salesforce with permissions to create Account records
+    ...                         - User must have access to the Accounts tab
+    ...                         - Lightning Experience UI must be enabled
     ...
-    ...    **Test Data:**
-    ...    - Account Name: "Hidde Account"
-    ...    - Ownership: Private
-    ...    - Type: Customer - Direct
-    ...    - Industry: Construction
+    ...                         **Test Data:**
+    ...                         - Account Name: "Hidde Account"
+    ...                         - Ownership: Private
+    ...                         - Type: Customer - Direct
+    ...                         - Industry: Construction
     ...
-    ...    **Expected Result:**
-    ...    A new Account record is created successfully with all specified field values, 
-    ...    and a confirmation message is displayed.
+    ...                         **Expected Result:**
+    ...                         A new Account record is created successfully with all specified field values,
+    ...                         and a confirmation message is displayed.
     ...
-    ...    **Test Steps:**
-    ...    1. Navigate to Accounts - Click on the "Accounts" tab to access the Accounts list view
-    ...    2. Initiate new record - Click the "New" button to open the account creation modal
-    ...    3. Enable modal context - Activate modal mode to ensure QWords interact with the dialog
-    ...    4. Verify modal header - Confirm "New Account" header is displayed
-    ...    5. Enter account name - Type "Hidde Account" into the required Account Name field
-    ...    6. Set ownership - Select "Private" from the Ownership picklist
-    ...    7. Set account type - Select "Customer - Direct" from the Type picklist
-    ...    8. Set industry - Select "Construction" from the Industry picklist
-    ...    9. Save the record - Click the "Save" button (exact match) to commit the changes
-    ...    10. Disable modal context - Deactivate modal mode to return to standard page context
-    ...    11. Verify success - Confirm the success message "was created." is displayed
+    ...                         **Test Steps:**
+    ...                         1. Navigate to Accounts - Click on the "Accounts" tab to access the Accounts list view
+    ...                         2. Initiate new record - Click the "New" button to open the account creation modal
+    ...                         3. Enable modal context - Activate modal mode to ensure QWords interact with the dialog
+    ...                         4. Verify modal header - Confirm "New Account" header is displayed
+    ...                         5. Enter account name - Type "Hidde Account" into the required Account Name field
+    ...                         6. Set ownership - Select "Private" from the Ownership picklist
+    ...                         7. Set account type - Select "Customer - Direct" from the Type picklist
+    ...                         8. Set industry - Select "Construction" from the Industry picklist
+    ...                         9. Save the record - Click the "Save" button (exact match) to commit the changes
+    ...                         10. Disable modal context - Deactivate modal mode to return to standard page context
+    ...                         11. Verify success - Confirm the success message "was created." is displayed
     ...
-    ...    **Author:** [Your Name]
-    ...    **Created:** [Date]
-    ...    **Last Modified:** [Date]
-    
-    [Tags]    account    salesforce    smoke    regression    lightning
+    ...                         **Author:** [Your Name]
+    ...                         **Created:** [Date]
+    ...                         **Last Modified:** [Date]
+
+    [Tags]                      account                     salesforce                  smoke                 regression            lightning
 
     # Step 1: Navigate to the Accounts tab
-    ClickText    Accounts
-    
+    ClickText                   Accounts
+
     # Step 2: Click the New button to open the account creation form
-    ClickText    New
-    
+    ClickText                   New
+
     # Step 3: Enable modal mode to interact with the dialog window
-    UseModal    On
-    
+    UseModal                    On
+
     # Step 4: Verify the New Account modal header is displayed
-    VerifyText    New Account
-    
+    VerifyText                  New Account
+
     # Step 5: Enter the account name in the required field (marked with *)
-    TypeText    *Account Name    Hidde Account
-    
+    TypeText                    *Account Name               Hidde Account
+
     # Step 6: Select the ownership type from the picklist
-    PickList    Ownership    Private
-    
+    PickList                    Ownership                   Private
+
     # Step 7: Select the account type from the picklist
-    PickList    Type    Customer - Direct
-    
+    PickList                    Type                        Customer - Direct
+
     # Step 8: Select the industry category from the picklist
-    PickList    Industry    Construction
-    
+    PickList                    Industry                    Construction
+
     # Step 9: Save the account record (exact match to avoid clicking "Save & New")
-    ClickText    Save    partial_match=False
-    
+    ClickText                   Save                        partial_match=False
+
     # Step 10: Disable modal mode to return to standard page context
-    UseModal    Off
-    
+    UseModal                    Off
+
     # Step 11: Verify the success message confirming account creation
-    VerifyText    was created.
+    VerifyText                  was created.
 
