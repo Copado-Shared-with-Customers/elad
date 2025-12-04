@@ -9,7 +9,7 @@ Test Teardown               End suite
 ${experience_cloud_site}    https://orgfarm-4cf24f140f-dev-ed.develop.my.site.com/PublicDataIntake/
 
 *** Test Cases ***
-Log in with MFA to a third-party site
+GitHub Login Flow Including MFA Verification
     [Documentation]         Automates the GitHub login process with conditional Multi-Factor Authentication (MFA) handling.
     ...
     ...                     This test case navigates to GitHub, enters user credentials, and intelligently handles
@@ -100,6 +100,8 @@ Submit Experience Cloud case form and verify record creation in Salesforce
     VerifyField             Subject                     Case ${TODAY}
     VerifyField             Web Phone                   ${phone_number}
     VerifyField             Web Email                   ${first_name}.${last_name}@notexist.com
+
+    Login As                
 
 Upload files from a local machine to Salesforce or a third-party site
     [Documentation]
