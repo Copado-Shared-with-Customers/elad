@@ -33,7 +33,7 @@ End suite
 
 Login
     [Documentation]             Login to Salesforce instance
-    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                    ${password}=${sf_password}
+    [Arguments]                 ${login_url}=${sf_login_url}                            ${username}=${sf_username}                              ${password}=${sf_password}
     GoTo                        ${login_url}
     TypeText                    Username                    ${username}
     TypeText                    Password                    ${password}
@@ -97,5 +97,19 @@ Format Phone Number
     # Replacement: Must use double-escaped backreferences and explicitly include spaces
     ${replacement}=             Set Variable                (\\\\1) \\\\2-\\\\3 x\\\\4
 
-    ${corrected_number}=        Replace String Using Regexp                             ${flawed_number}            ${pattern}        ${replacement}
+    ${corrected_number}=        Replace String Using Regexp                             ${flawed_number}            ${pattern}                  ${replacement}
     RETURN                      ${corrected_number}
+
+Login As
+    [Documentation]             Login As different persona. User needs to be logged into Salesforce with Admin rights
+    ...                         before calling this keyword to change persona.
+    ...                         Example:
+    ...                         LoginAs                     Chatter Expert
+    [Arguments]                 ${persona}
+    ClickText                   Setup
+    ClickText                   Setup for current app
+    SwitchWindow                NEW
+    TypeText                    Search Setup                ${persona}                  delay=2
+    ClickText                   User                        anchor=${persona}           delay=5                     # wait for list to populate, then click
+    VerifyText                  Freeze                      timeout=45                  # this is slow, needs longer timeout
+    ClickText                   Login                       anchor=Freeze               delay=1
